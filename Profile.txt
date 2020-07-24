@@ -1,0 +1,12 @@
+Name,Mr. PoPo
+Level,0
+BestScore,0
+Coins,10
+HealthUp,0
+HitSpeedUp,0
+HitDamageUp,0
+Health,10.0
+PunchWait,3.0
+KickWait,6.0
+PunchDamage,1.5
+KickDamage,5.0
