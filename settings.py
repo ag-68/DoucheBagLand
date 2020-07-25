@@ -9,7 +9,7 @@ WIN_DIM = [900, 600, 50] # width heigth frame-heigth
 ICON_DIM = [50, 50, 30, 30, 70, 40, 25, 25, 80, 40] # width/heigth for player(0-1), punch(2-3), kick(4-5), potion(6-7)
 DOCK_BUT_DIM = [30, 30, 100, 30, 120, 30, 75, 30, 120, 30] #width/heigth for dock buttons: volume(0-1)/exit(2-3)/leave(4-5)/back(6-7)/go to shop (8-9)
 DOCK_BUT_LOC = [10, 10, 75, 10, 180, 10, 180, 10, 180, 10] # x-y location of buttons: " "
-RECT_DIM = [200, 70, 80, 40, 150, 150, 110, 110] # rectangle width/heights for player name(0-1) / hit-health cond (2-3) / shop item (4-5) / shop item img (6-7)
+RECT_DIM = [200, 70, 80, 40, 150, 150, 98, 98] # rectangle width/heights for player name(0-1) / hit-health cond (2-3) / shop item (4-5) / shop item img (6-7)
 RECT_LOC =[(WIN_DIM[0]+RECT_DIM[0])/2, (WIN_DIM[1]+RECT_DIM[1])/2, WIN_DIM[0]-3*RECT_DIM[2]-12, WIN_DIM[1]-RECT_DIM[3]-10, (WIN_DIM[0]-3*RECT_DIM[4])/2, (WIN_DIM[1]-RECT_DIM[5])/2]
 # topleft corners of rect. of player name / hit health cond / first shop item
 

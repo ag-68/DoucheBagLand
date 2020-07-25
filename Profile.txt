@@ -1,7 +1,7 @@
 Name,Mr. PoPo
 Level,0
 BestScore,0
-Coins,10
+Coins,0
 HealthUp,0
 HitSpeedUp,0
 HitDamageUp,0

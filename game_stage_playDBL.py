@@ -27,16 +27,15 @@ def run_game_stage_play():
 
     # Ready to connect to server
     net = Network()
-    print("initial info: ", net.init_info)
-
-    init_player_info=pickle.loads(net.init_info)
-    print("Received Initial Player Info: ", init_player_info)
 
     # if no connection to server
-    if not init_player_info:
+    if net.connection == False:
         drawings.draw_no_connection()
         server_communicate = False
         game_stage = "name"
+    else:
+        init_player_info = pickle.loads(net.init_info)
+        print("Received Initial Player Info: ", init_player_info)
 
     if server_communicate == True:
 
@@ -81,8 +80,7 @@ def run_game_stage_play():
                 run = False
                 break
             else:
-                tx_time = time.perf_counter()
-                try:
+                """try:
                     net.send(client_player_info)
                 except:
                     print("sending not successful")
@@ -90,19 +88,42 @@ def run_game_stage_play():
                     game_stage = "name"
                     run = False
                     net.close()
+                    break"""
+                net.send(client_player_info)
+                if net.connection == False:
+                    print("sending not successful")
+                    drawings.draw_no_connection()
+                    game_stage = "name"
+                    run = False
+                    net.close()
                     break
-                #print("tx delay: ", tx_time - time.perf_counter())
+
                 # receiving the new player list info from server
-                #time.sleep(0.1)
-                #print("process delay: ", rx_time - time.perf_counter())
                 data = net.receive()
-                game_data = pickle.loads(data)
+                if net.connection == True:
+                    game_data = pickle.loads(data)
+                else:
+                    print("receiving not successful")
+                    drawings.draw_no_connection()
+                    game_stage = "name"
+                    run = False
+                    net.close()
+                    break
+
+                """"if data[0] == True:
+                    game_data = pickle.loads(data[1])
+                else:
+                    print("receiving not successful")
+                    drawings.draw_no_connection()
+                    game_stage = "name"
+                    run = False
+                    net.close()
+                    break"""
                 """try:
                     game_data = pickle.loads(data)
                 except:
                     print("unknown error")"""
-                #print("rx delay: ",  time.perf_counter()-rx_time)
-                rx_time = time.perf_counter()
+
                 game_IDX = game_data.game_ID
                 playerInfoList = game_data.playerInfoList
                 potionList = game_data.potionList

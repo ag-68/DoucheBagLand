@@ -10,8 +10,13 @@ class Network:
         self.port = 5555
         self.HEADERSIZE = 8
         self.addr = (self.server, self.port)
-        self.client.connect(self.addr)
         self.RX_SIZE = 512
+        self.connection = True
+        try:
+            self.client.connect(self.addr)
+        except:
+            self.connection = False
+            print("Cannot connect to server Address")
         self.init_info = self.receive()
 
     def send(self, data):
@@ -21,11 +26,9 @@ class Network:
             self.client.sendall(tx_msg)
         except socket.error as e:
             print(e)
-            print("closing client socket...")
-            self.client.close()
+            self.connection = False
 
     def receive(self):
-
         receiving = True
         new_msg = True
         full_msg = b''
@@ -36,25 +39,27 @@ class Network:
         while receiving:
             if count == total_loop_num:
                 buffer_size = rem_buffer_size
+            try:
+                msg = self.client.recv(buffer_size)
+                print("ETR: ", time.perf_counter()-tx_time)
+                tx_time = time.perf_counter()
+                if new_msg and self.connection:
+                    msg_len = int(msg[:self.HEADERSIZE])
+                    rem_buffer_size = (msg_len + self.HEADERSIZE) % self.RX_SIZE
+                    total_loop_num = (msg_len + self.HEADERSIZE) // self.RX_SIZE
+                    new_msg = False
 
-            msg = self.client.recv(buffer_size)
-            print("ETR: ", time.perf_counter()-tx_time)
-            tx_time = time.perf_counter()
+                full_msg += msg
+                count += 1
 
-            if new_msg:
-                msg_len = int(msg[:self.HEADERSIZE])
-                rem_buffer_size = (msg_len+self.HEADERSIZE) % self.RX_SIZE
-                total_loop_num = (msg_len+self.HEADERSIZE) // self.RX_SIZE
-                new_msg = False
-                #print("msg length: ", msg_len)
-                #print("rem_buffer_size:", rem_buffer_size)
-                #print("total loop num",total_loop_num)
-
-            full_msg += msg
-            count += 1
-
-            if len(full_msg)-self.HEADERSIZE == msg_len:
+                if len(full_msg) - self.HEADERSIZE == msg_len:
+                    receiving = False
+            except:
                 receiving = False
+                self.connection = False
+                break
+
+
 
         #print("ETR: ", post_tx_time-pre_tx_time)
         print("msg size: ", len(full_msg))
